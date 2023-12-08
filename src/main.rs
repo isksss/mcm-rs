@@ -1,13 +1,40 @@
+mod config;
 mod utils;
-pub mod config;
-use utils::show_logo;
+mod commands;
 
+use utils::show_logo;
+use clap::{Args, Parser, Subcommand};
+use commands::InitCommand;
+
+#[derive(Parser)]
+#[command(name="mcm")]
+#[command(about="")]
+struct Cli {
+    #[clap(subcommand)]
+    subcmd: Commands,
+}
+
+#[derive(Debug, Subcommand)]
+enum Commands{
+    Init{
+        
+    },
+    Start{
+
+    }
+}
 
 fn main() {
     show_logo();
-    let config = config::load_config();
-    match config {
-        Ok(config) => println!("{:?}", config),
-        Err(err) => config::create_default_config().unwrap() ,
+    let args = Cli::parse();
+
+    let config_file = "mcm.toml";
+    match args.subcmd {
+        Commands::Init{} => {
+            commands::InitCommand(config_file);
+        },
+        Commands::Start{} => {
+            println!("start");
+        }
     }
 }

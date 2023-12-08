@@ -1,4 +1,4 @@
-use serde::{Deserialize, Serialize, de};
+use serde::{de, Deserialize, Serialize};
 use std::fs::{self};
 use toml;
 
@@ -15,14 +15,13 @@ pub struct Server {
 }
 
 // read configfile and parse
-pub fn load_config() -> Result<Config, String> {
-    let config_file_name = "config.toml";
-    let config_file :String = match fs::read_to_string(config_file_name) {
+pub fn load_config(config_file_name: &str) -> Result<Config, String> {
+    let config_file: String = match fs::read_to_string(config_file_name) {
         Ok(config_file) => config_file,
         Err(_) => return Err(format!("Could not read config file: {}", config_file_name)),
     };
 
-    let config : Result<Config, toml::de::Error> = toml::from_str(&config_file);
+    let config: Result<Config, toml::de::Error> = toml::from_str(&config_file);
     match config {
         Ok(config) => Ok(config),
         Err(_) => Err(String::from("Could not parse config file")),
@@ -30,9 +29,8 @@ pub fn load_config() -> Result<Config, String> {
 }
 
 // create default configfile
-pub fn create_default_config() -> Result<(), String> {
-    let config_file_name = "config.toml";
-    let defaultvonifg : Config = Config {
+pub fn create_default_config(config_file_name: &str) -> Result<(), String> {
+    let defaultvonifg: Config = Config {
         server: Server {
             project: "paper".to_string(),
             version: None,

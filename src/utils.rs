@@ -1,4 +1,3 @@
-
 pub fn show_logo() {
     println!(
         "
