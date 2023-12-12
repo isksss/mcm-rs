@@ -1,10 +1,11 @@
-use serde::{de, Deserialize, Serialize};
+use serde::{Deserialize, Serialize};
 use std::fs::{self};
 use toml;
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Config {
     pub server: Server,
+    pub api: Api,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -12,6 +13,11 @@ pub struct Server {
     pub project: String,
     pub version: Option<String>,
     pub build: Option<String>,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct Api{
+    pub url: String,
 }
 
 // read configfile and parse
@@ -33,8 +39,11 @@ pub fn create_default_config(config_file_name: &str) -> Result<(), String> {
     let defaultvonifg: Config = Config {
         server: Server {
             project: "paper".to_string(),
-            version: None,
-            build: None,
+            version: Some("1.16.5".to_string()),
+            build: Some("".to_string()),
+        },
+        api: Api {
+            url: "https://api.papermc.io/v2/projects".to_string(),
         },
     };
 
